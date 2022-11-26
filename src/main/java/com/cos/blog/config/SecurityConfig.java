@@ -20,7 +20,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity //시큐리티 필터가 등록(추가)이 된다= 스프링 시큐리티가 활성화가 되어 있는데 ,어떤 설정을 해당 파일에서 진행한다.
 @EnableGlobalMethodSecurity(prePostEnabled = true)  //특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다.
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private PrincipalDetailService principalDetailService;
 
@@ -29,13 +28,6 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
-
-
-
-
-
-
-
     @Bean  //IoC가 되요
     public BCryptPasswordEncoder encodePWD() {
         return new BCryptPasswordEncoder();
