@@ -1,30 +1,69 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8" %>
 
-<%@ include file="../layout/header.jsp"%>
+<%@ include file="../layout/header.jsp" %>
 <div class="container">
-    <form>
+    <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
 
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text"  class="form-control" placeholder="Enter title" id="title">
+    <c:if test="${board.user.id ==principal.user.id}">
+        <a href="/board/${board.id}/updateForm" class="btn btn-warning">수정</a>
+        <button id="btn-delete" class="btn btn-danger">삭제</button>
+    </c:if>
+
+    <br><br>
+    <div>
+        글 번호 :<span id="id"> <i>${board.id}</i></span>
+        작성자 : <span> <i>${board.user.username}</i></span>
+    </div>
+    <br>
+
+    <div class="form-group">
+        <h3>${board.title}</h3>
+    </div>
+    <hr/>
+    <div class="form-group">
+        <div>${board.content}</div>
+    </div>
+    <hr/>
+
+    <div class="card">
+        <form>
+            <input type="hidden" id="userId" value="${principal.user.id}">
+
+
+        <input type="hidden" id="boardId" value="${board.id}">
+        <div>
+            <div class="card-body">
+                <textarea id="reply-content" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="card-footer">
+                <button type="button" id="btn-reply-save" class="btn btn-primary">등록</button>
+            </div>
         </div>
+        </form>
+    </div>
 
-        <div class="form-group">
-            <label for="content">Content</label>
-            <textarea class="form-control summernote" rows="5" id="content"></textarea>
-        </div>
-    </form>
+    <div class="card">
+        <div class="card-header">댓글리스트</div>
+        <ul id="reply--box" class="list-group">
+            <c:forEach var="reply" items="${board.replys}">  <!-- jpa의 장점으로 board 모델에 reply와 user를 갖고 있음 -->
+                <li id="reply--${reply.id}" class="list-group-item d-flex justify-content-between">
+                    <div>${reply.content}</div>
+                    <div class="d-flex">
+                        <div class="font-italic">작성자:${reply.user.username} &nbsp;</div>
+                        <c:if test="${reply.user.id eq principal.user.id}">
+                            <button onClick="index.replyDelete(${board.id}, ${reply.id})" class="badge">삭제</button>
+                        </c:if>
+                    </div>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
 
-        <button id="btn-save" class="btn btn-primary">글쓰기 완료</button>
+
 </div>
 
 <br>
-<script>
-    $('.summernote').summernote({
-        tabsize: 2,
-        height: 300
-    });
-</script>
+
 <script src="/js/board.js"></script>
-<%@ include file="../layout/footer.jsp"%>
+<%@ include file="../layout/footer.jsp" %>
